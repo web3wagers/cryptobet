@@ -29,8 +29,22 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Truffle setup 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To deploy the contracts we are using two different techs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Ganache
+
+Head over to https://archive.trufflesuite.com/ganache/ and install the app, this will create a blockchain exactly like Ethereum but running on your local computer.
+
+### Truffle 
+
+To create a new Solidity contract you can run the following command:
+
+``` truffle create contract name-of-contract ```
+
+You will have to add this to migrations in order to deploy the contract, take a look at 'migrations/1721667808_initial_migration.js' to have an idea on how to add the contract to migrations
+
+After you added the code for the migration, run the following command to deploy the contract to the Ganache blockchain:
+
+``` truffle migrate --reset ```
