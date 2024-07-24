@@ -9,18 +9,28 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      'background': '#334756',
-      'menuContent': '#0B2336',
-      'menuBar': '#082032',
-      'buttonOrange': '#FF4C29',
-      'lightGray': "#D9D9D9",
-      'lightOrange': '#FF8A73',
-      'white': '#ffffff',
-    },
-    extend: {},
+    extend: {
+      colors: {
+        'background': '#334756',
+        'menuContent': '#0B2336',
+        'menuBar': '#082032',
+        'buttonOrange': '#FF4C29',
+        'lightGray': "#D9D9D9",
+        'lightOrange': '#FF8A73',
+        'white': '#ffffff',
+        'black': '#000000',
+        transparent: 'transparent',
+        current: 'currentColor',
+        'white': '#ffffff',
+        'purple': '#3f3cbb',
+        'midnight': '#121063',
+        'metal': '#565584',
+        'tahiti': '#3ab7bf',
+        'silver': '#ecebff',
+        'bubble-gum': '#ff77e9',
+        'bermuda': '#78dcca',
+      },
+    }
   },
   plugins: [
 

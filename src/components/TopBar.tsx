@@ -3,7 +3,7 @@ import React from 'react'
 const TopBar = () => {
   return (
     <div
-      className='w-[100%] h-[12.5rem] bg-menuContent text-white flex justify-between items-center p-10'
+      className='z-10 fixed pl-[26rem] w-[100%] h-[12.5rem] bg-menuContent text-white flex justify-between items-center p-10 '
     >
       <h3 className={'text-4xl'}>
         CryptoBet

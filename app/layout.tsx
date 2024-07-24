@@ -18,11 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} flex`}>
+      <body className={`${roboto.className} flex bg-background`}>
         <SideBar />
         <div className={'flex flex-col w-full'}>
           <TopBar />
-          <div className='content bg-background w-full h-full '>
+          <div className='content  bg-background w-full h-[100%]  pl-[25rem] pt-[12.5rem]'>
             {children}
           </div>
         </div>
