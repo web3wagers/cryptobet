@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, {useEffect, useState} from 'react'
 import MatchAPI from '@/src/mock/matches.json'
 import {MatchElement} from '@/src/config/interfaces/match'
+import {setTimeout} from 'timers'
 
 
 interface MatchProps {
@@ -15,6 +16,8 @@ interface MatchProps {
 const Match = ({params}: MatchProps) => {
 
   const [selectedMatch, setSelectedMatch] = useState<MatchElement>()
+  const [selectedTeam, setSelectedTeam] = useState<string>('')
+  const [winner, setwinner] = useState('')
   const {matches} = MatchAPI
   useEffect(() => {
     const filterMatches = () => {
@@ -27,6 +30,40 @@ const Match = ({params}: MatchProps) => {
 
     filterMatches()
   }, [])
+
+  useEffect(() => {
+    console.log(selectedTeam)
+  }, [selectedTeam])
+
+  const setBet = (team: string) => {
+    setSelectedTeam(prev => prev = team)
+    determineWinner(team)
+  }
+
+  const determineWinner = (team: string) => {
+    console.log(`${team} - ${selectedMatch?.strHomeTeam}`)
+    console.log(`${selectedMatch?.intHomeScore} - ${selectedMatch?.intAwayScore}`)
+    setTimeout(() => {
+
+      if (selectedMatch?.intHomeScore && selectedMatch?.intAwayScore) {
+        if (selectedMatch?.intHomeScore > selectedMatch?.intAwayScore) {
+          if (selectedMatch?.strHomeTeam === team) {
+            setwinner('Bettor Wins')
+          } else {
+            setwinner('House Wins')
+          }
+        } else if (selectedMatch?.intHomeScore < selectedMatch?.intAwayScore) {
+          if (selectedMatch?.strAwayTeam === team) {
+            setwinner('Bettor Wins')
+          } else {
+            setwinner('House Wins')
+          }
+        } else {
+          setwinner('Draw')
+        }
+      }
+    }, 4000);
+  }
 
   return (
     <div
@@ -52,7 +89,8 @@ const Match = ({params}: MatchProps) => {
             className='flex  justify-center items-center gap-10 mt-10'
           >
             <div
-              className='w-[35.4rem] h-[40.9rem] bg-lightOrange rounded-xl p-10 flex flex-col justify-center items-center'
+              className={`${selectedTeam === selectedMatch?.strHomeTeam ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.strHomeTeam!)}
             >
               <Image
                 src={selectedMatch?.strHomeTeamBadge!}
@@ -62,11 +100,16 @@ const Match = ({params}: MatchProps) => {
                 className={'drop-shadow-xl'}
               />
             </div>
-            <div className='w-[18.2rem] h-[13.5rem] bg-lightOrange text-white text-9xl flex justify-center items-center rounded-xl'>
-              <p>VS</p>
+            <div className='w-[18.2rem] h-[13.5rem] bg-lightOrange text-white text-5xl flex justify-center items-center rounded-xl'>
+              <p>
+                {
+                  winner === '' ? 'VS' : winner
+                }
+              </p>
             </div>
             <div
-              className='w-[35.4rem] h-[40.9rem] bg-lightOrange rounded-xl p-10 flex flex-col justify-center items-center'
+              className={`${selectedTeam === selectedMatch?.strAwayTeam ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.strAwayTeam!)}
             >
               <Image
                 src={selectedMatch?.strAwayTeamBadge!}
