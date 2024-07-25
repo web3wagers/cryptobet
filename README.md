@@ -1,50 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cryptobet App
+
+Cryptobet is a decentralized betting application. The project is divided into two main parts: the backend, which uses Hardhat for smart contract development and deployment, and the frontend, which is built using Next.js.
+
+## Project Structure
+
+- **Backend**: This folder contains the smart contracts and related scripts for deployment. The contracts are written in Solidity and are deployed on the Sepolia test network using Hardhat.
+
+  - To compile the contracts, use:
+    ```shell
+    npx hardhat compile
+    ```
+
+  - To deploy the contracts locally, use:
+    ```shell
+    npx hardhat ignition deploy ./ignition/modules/your_contract.js
+    ```
+
+  - To deploy the contracts on the Sepolia network, use:
+    ```shell
+    npx hardhat ignition deploy ./ignition/modules/your_contract.js --network optimismSepolia
+    ```
+
+- **Frontend**: This folder contains the web application built with Next.js. The frontend interacts with the smart contracts and provides a user interface for placing bets and viewing outcomes.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Ensure you have Node.js and npm installed. You will also need Hardhat and Next.js to run the backend and frontend, respectively.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**:
+    ```shell
+    git clone https://github.com/yourusername/cryptobet.git
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. **Install dependencies for the backend**:
+    ```shell
+    cd backend
+    npm install
+    ```
 
-## Learn More
+3. **Install dependencies for the frontend**:
+    ```shell
+    cd ../frontend
+    npm install
 
-To learn more about Next.js, take a look at the following resources:
+Open your browser and navigate to `http://localhost:3000` to view the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributors
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Truffle setup 
-
-To deploy the contracts we are using two different techs
-
-### Ganache
-
-Head over to https://archive.trufflesuite.com/ganache/ and install the app, this will create a blockchain exactly like Ethereum but running on your local computer.
-
-### Truffle 
-
-To create a new Solidity contract you can run the following command:
-
-``` truffle create contract name-of-contract ```
-
-You will have to add this to migrations in order to deploy the contract, take a look at 'migrations/1721667808_initial_migration.js' to have an idea on how to add the contract to migrations
-
-After you added the code for the migration, run the following command to deploy the contract to the Ganache blockchain:
-
-``` truffle migrate --reset ```
+- [EmmanuelAR](https://github.com/EmmanuelAR)
+- [adrianvrj](https://github.com/adrianvrj)
+- [jakefernandez102](https://github.com/jakefernandez102)
