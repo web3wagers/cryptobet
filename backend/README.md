@@ -10,3 +10,8 @@ To deploy the contracts locally run
 ```shell
 npx hardhat ignition deploy ./ignition/modules/your_contract.js
 ```
+
+To deploy contracts on sepolia:
+```shell
+npx hardhat ignition deploy ./ignition/modules/your_contract.js --network optimismSepolia
+```
