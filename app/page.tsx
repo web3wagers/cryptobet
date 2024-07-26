@@ -23,7 +23,7 @@ export default function Home() {
               <p>{match.strAwayTeam}</p>
             </div>
             <div className={'flex justify-center text-2xl'}>
-              <p>{match.strTime}</p>className={'drop-shadow-xl'}
+              <p>{match.strTime}</p>
             </div>
             <div
               className={'flex justify-center items-center text-4xl gap-10 font-bold'}
@@ -33,7 +33,7 @@ export default function Home() {
                 alt='barca shield'
                 width={100}
                 height={139}
-                className={'drop-shadow-xl shadow-buttonOrange shadow-inner'}
+                // className={'drop-shadow-xl shadow-buttonOrange shadow-inner'}
               />
               <p>VS</p>
               <Image
@@ -41,7 +41,7 @@ export default function Home() {
                 alt='barca shield'
                 width={100}
                 height={139}
-                className={'drop-shadow-xl shadow-buttonOrange shadow-md'}
+                // className={'drop-shadow-xl shadow-buttonOrange shadow-md'}
               />
             </div>
 
