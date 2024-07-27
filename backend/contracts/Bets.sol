@@ -7,13 +7,14 @@ contract Bets {
         string name;
         string team1;
         string team2;
+        string time;
         uint8 result; // 0: Not set, 1: Team1 wins, 2: Team2 wins, 3: Draw
         bool isActive;
     }
 
     struct Bet {
         uint eventId;
-        address better;
+        address payable better;
         uint8 predictedResult; // 1: Team1 wins, 2: Team2 wins, 3: Draw
         uint amount;
         bool paid;
@@ -37,11 +38,11 @@ contract Bets {
         _;
     }
     
-    function createEvent(string memory name, string memory team1, string memory team2) public onlyOwner {
+    function createEvent(string memory name, string memory team1, string memory team2,string memory time) public onlyOwner {
         // method for event creation
         // params: name: name of the event, team1: team1 name, team2: team2 name
         // returns: none
-        events[nextEventId] = Event(nextEventId, name, team1, team2, 0, true);
+        events[nextEventId] = Event(nextEventId, name, team1, team2,time, 0, true);
         nextEventId++;
     }
 
@@ -53,7 +54,7 @@ contract Bets {
         require(msg.value > 0, "Bet amount must be greater than zero");
         require(predictedResult >= 1 && predictedResult <= 3, "Invalid predicted result");
 
-        eventBets[eventId].push(Bet(eventId, msg.sender, predictedResult, msg.value, false));
+        eventBets[eventId].push(Bet(eventId, payable(msg.sender), predictedResult, msg.value, false));
 
         emit BetPlaced(eventId, msg.sender, msg.value, predictedResult);
     }
@@ -91,9 +92,12 @@ contract Bets {
             Bet storage bet = eventBets[eventId][i];
             if (bet.predictedResult == events[eventId].result && !bet.paid) {
                 uint payout = (bet.amount * totalPool) / winnerPool;
-                payable(bet.better).transfer(payout);
-                bet.paid = true;
+                
+                // payable(bet.better).transfer(payout);
+                (bool sent, ) = bet.better.call{value: payout}("");
+                require(sent, "Failed to send Ether");
 
+                bet.paid = true;
                 emit BetPaid(eventId, bet.better, payout);
             }
         }
