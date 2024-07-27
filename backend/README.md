@@ -2,23 +2,32 @@
 
 This project deploys contracts using hardat, to compile the contracts run
 
-# Compiling Contracts
-To compile the contracts, use the following command:
+# Local Configuration
+To run and deploy the contract in OP Sepolia, follow the next steps:
+
+1. Move to Backend Folder
+```shell
+cd backend
+```
+2. Install Hardhat enviroment
+```shell
+npm install --save-dev hardhat
+```
+3. Compile the contracts
 ```shell
 npx hardhat compile
 ```
-#Deploying Contracts
-Local Deployment
-To deploy the contracts locally, run: 
+4. Deploy and verify contract in OP Sepolia
 ```shell
-npx hardhat ignition deploy ./ignition/modules/your_contract.js
+npx hardhat ignition deploy ignition/modules/Bets.js --network optimismSepolia --verify
 ```
 
-# Deployment on Sepolia
-To deploy the contracts on the Sepolia network, use:
-```shell
-npx hardhat ignition deploy ./ignition/modules/your_contract.js --network optimismSepolia
-```
+# Important Configurations 
+- To deploy in OP Sepolia you need to create a .env file with the following variables
+1. ALCHEMY_API_KEY  => Create an account to get the api key here https://www.alchemy.com/ 
+2. PRIVATE_KEY      => Wallet private key 
+3. ETHERSCAN_API_KEY=> Create an account here https://optimistic.etherscan.io/register
+
 # Contributors
 We appreciate the contributions of the following individuals to this project:
 - [EmmanuelAR](https://github.com/EmmanuelAR)
