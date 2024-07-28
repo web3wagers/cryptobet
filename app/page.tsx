@@ -1,35 +1,33 @@
-'use client'
+/* eslint-disable @next/next/no-async-client-component */
 import Image from "next/image";
-import {useEffect, useState} from "react";
-import matchesAPI from "../src/mock/matches.json";
-import {Match, MatchElement} from "@/src/config/interfaces/match";
 import Link from "next/link";
+import getAllEvents from "@/src/contracts/BetsContract";
 
-
-export default function Home() {
-  const [matches, setMatches] = useState<{matches: MatchElement[]}>(matchesAPI as any)
+export default async function Home() {
+  var matchFetch = await getAllEvents();
+  const matches = matchFetch;
 
   return (
     <div className='flex justify-evenly gap-10 flex-wrap p-10'>
       {
-        matches.matches?.map((match: MatchElement) => (
+        matches.matches?.map((match: any) => (
           <div
-            key={match?.idEvent}
+            key={match?.id}
             className={'w-[43rem] h-[30.9rem] bg-lightGray rounded-xl p-10 flex flex-col justify-between items-center'}
           >
             <div className={'flex justify-center text-3xl font-bold'}>
-              <p>{match.strHomeTeam}</p>
+              <p>{match.team1}</p>
               <p> - </p>
-              <p>{match.strAwayTeam}</p>
+              <p>{match.team2}</p>
             </div>
             <div className={'flex justify-center text-2xl'}>
-              <p>{match.strTime}</p>
+              <p>{match.time}</p>
             </div>
             <div
               className={'flex justify-center items-center text-4xl gap-10 font-bold'}
             >
               <Image
-                src={match.strHomeTeamBadge}
+                src='https://www.thesportsdb.com/images/media/team/badge/yswsww1473503818.png'
                 alt='barca shield'
                 width={100}
                 height={139}
@@ -37,7 +35,7 @@ export default function Home() {
               />
               <p>VS</p>
               <Image
-                src={match.strAwayTeamBadge}
+                src='https://www.thesportsdb.com/images/media/team/badge/yswsww1473503818.png'
                 alt='barca shield'
                 width={100}
                 height={139}
@@ -47,7 +45,7 @@ export default function Home() {
 
             <Link
               className={' bg-buttonOrange text-white text-2xl p-5 rounded-xl'}
-              href={`match/${match.idEvent}`}
+              href={`match/${match.id}`}
             >
               Bet
             </Link>
