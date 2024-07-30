@@ -123,4 +123,9 @@ contract Bets {
         }
         return allEvents;
     }
+
+    function getEventById(uint _id) public view returns (Event memory) {
+        Event memory retEvent = events[_id];
+        return retEvent;
+    }
 }
