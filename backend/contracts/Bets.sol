@@ -3,10 +3,13 @@ pragma solidity ^0.8.24;
 
 contract Bets {
     // lets use eventType as the following:
-    // 1: soccer
-    // 2: basketball
-    // 3: football
+    // 0: soccer
+    // 1: basketball
+    // 2: football
     // we will be betting only these sports for the moment
+    // IMAGES:
+    // when creating an event pls use this site only:
+    // https://www.thesportsdb.com/
     struct Event {
         uint id;
         uint eventType;
