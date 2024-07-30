@@ -2,15 +2,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import getAllEvents from "@/src/contracts/BetsContract";
-
+import matchAPI from "@/src/mock/matches.json";
+import {Match, MatchElement} from "@/src/config/interfaces/match";
 export default async function Home() {
-  var matchFetch = await getAllEvents();
-  const matches = matchFetch;
+  //TODO: uncomment the 2 lines below
+  // var matchFetch = await getAllEvents();
+  // const matches = matchFetch;
+  const matches:Match = matchAPI;
 
   return (
     <div className='flex justify-evenly gap-10 flex-wrap p-10'>
-      {
-        matches.matches?.map((match: any) => (
+      {//TODO: chage the type of match 
+        matches.matches?.map((match:MatchElement |any) => (
           <div
             key={match?.id}
             className={'w-[43rem] h-[30.9rem] bg-lightGray rounded-xl p-10 flex flex-col justify-between items-center'}
@@ -45,7 +48,8 @@ export default async function Home() {
 
             <Link
               className={' bg-buttonOrange text-white text-2xl p-5 rounded-xl'}
-              href={`match/${match.id}`}
+              //TODO: href={`match/${match.id}`}
+              href={`match/${match.idEvent}`}
             >
               Bet
             </Link>
