@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react'
 import MatchAPI from '@/src/mock/matches.json'
 import {MatchElement} from '@/src/config/interfaces/match'
 import {setTimeout} from 'timers'
-
+import Bets from '@/src/contracts/BetsContract'
 
 interface MatchProps {
   params: {
@@ -15,24 +15,21 @@ interface MatchProps {
 
 const Match = ({params}: MatchProps) => {
 
-  const [selectedMatch, setSelectedMatch] = useState<MatchElement>()
+  const [selectedMatch, setSelectedMatch] = useState<any>()
   const [selectedTeam, setSelectedTeam] = useState<string>('')
   const [winner, setwinner] = useState('')
   const {matches} = MatchAPI
   useEffect(() => {
-    const filterMatches = () => {
-      const filteredMatch = matches.filter((match: MatchElement) => {
-        console.log(match)
-        return match.idEvent === params.id
-      })
-      setSelectedMatch(filteredMatch[0])
+    const filterMatches = async () => {
+      const filteredMatch = await Bets.getEventById(parseInt(params.id))
+      console.log(filteredMatch);
+      setSelectedMatch(filteredMatch)
     }
 
     filterMatches()
   }, [])
 
   useEffect(() => {
-    console.log(selectedTeam)
   }, [selectedTeam])
 
   const setBet = (team: string) => {
@@ -41,8 +38,6 @@ const Match = ({params}: MatchProps) => {
   }
 
   const determineWinner = (team: string) => {
-    console.log(`${team} - ${selectedMatch?.strHomeTeam}`)
-    console.log(`${selectedMatch?.intHomeScore} - ${selectedMatch?.intAwayScore}`)
     setTimeout(() => {
 
       if (selectedMatch?.intHomeScore && selectedMatch?.intAwayScore) {
@@ -89,11 +84,11 @@ const Match = ({params}: MatchProps) => {
             className='flex  justify-center items-center gap-10 mt-10'
           >
             <div
-              className={`${selectedTeam === selectedMatch?.strHomeTeam ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.strHomeTeam!)}
+              className={`${selectedTeam === selectedMatch?.team1name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.team1name!)}
             >
               <Image
-                src={selectedMatch?.strHomeTeamBadge!}
+                src={selectedMatch?.team1imgurl!}
                 alt='barca shield'
                 width={300}
                 height={300}
@@ -108,11 +103,11 @@ const Match = ({params}: MatchProps) => {
               </p>
             </div>
             <div
-              className={`${selectedTeam === selectedMatch?.strAwayTeam ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.strAwayTeam!)}
+              className={`${selectedTeam === selectedMatch?.team2name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.team2name!)}
             >
               <Image
-                src={selectedMatch?.strAwayTeamBadge!}
+                src={selectedMatch?.team2imgurl!}
                 alt='barca shield'
                 width={300}
                 height={300}
