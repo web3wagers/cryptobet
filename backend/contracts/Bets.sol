@@ -2,11 +2,19 @@
 pragma solidity ^0.8.24;
 
 contract Bets {
+    // lets use eventType as the following:
+    // 1: soccer
+    // 2: basketball
+    // 3: football
+    // we will be betting only these sports for the moment
     struct Event {
         uint id;
+        uint eventType;
         string name;
-        string team1;
-        string team2;
+        string team1name;
+        string team2name;
+        string team1imgurl;
+        string team2imgurl;
         string time;
         uint8 result; // 0: Not set, 1: Team1 wins, 2: Team2 wins, 3: Draw
         bool isActive;
@@ -38,11 +46,13 @@ contract Bets {
         _;
     }
     
-    function createEvent(string memory name, string memory team1, string memory team2,string memory time) public onlyOwner {
+    function createEvent(uint eventType, string memory name, string memory team1name, 
+                         string memory team2name, string memory team1imgurl, string memory team2imgurl, 
+                         string memory time) public onlyOwner {
         // method for event creation
         // params: name: name of the event, team1: team1 name, team2: team2 name
         // returns: none
-        events[nextEventId] = Event(nextEventId, name, team1, team2,time, 0, true);
+        events[nextEventId] = Event(nextEventId, eventType, name, team1name, team2name, team1imgurl, team2imgurl, time, 0, true);
         nextEventId++;
     }
 
