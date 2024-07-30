@@ -280,6 +280,77 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getEventById",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eventType",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "team1name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "team2name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "team1imgurl",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "team2imgurl",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "result",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Bets.Event",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "eventId",
 				"type": "uint256"
 			}

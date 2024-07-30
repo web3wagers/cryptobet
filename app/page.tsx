@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-async-client-component */
 import Image from "next/image";
 import Link from "next/link";
-import getAllEvents from "@/src/contracts/BetsContract";
+import Bets from "@/src/contracts/BetsContract";
 
 export default async function Home() {
-  var matchFetch = await getAllEvents();
+  var matchFetch = await Bets.getAllEvents();
   const matches = matchFetch;
 
   return (
