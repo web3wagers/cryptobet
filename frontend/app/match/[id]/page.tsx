@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import MatchAPI from '@/src/mock/matches.json'
 import Bets from '@/src/contracts/BetsContract'
 
@@ -11,12 +11,12 @@ interface MatchProps {
   }
 }
 
-const Match = ({params}: MatchProps) => {
+const Match = ({ params }: MatchProps) => {
   const [selectedMatch, setSelectedMatch] = useState<any>();
   const [selectedTeam, setSelectedTeam] = useState<number>(0);
+  const [txHashLink, setTxHashLink] = useState<string>("");
+  const [txHash, setTxHash] = useState<string>("");
   const [eth, setEth] = useState<number>(0);
-  const [winner, setwinner] = useState('')
-  const {matches} = MatchAPI
   useEffect(() => {
     const filterMatches = async () => {
       const filteredMatch = await Bets.getEventById(parseInt(params.id))
@@ -38,7 +38,11 @@ const Match = ({params}: MatchProps) => {
   };
 
   async function sendBet() {
-    await Bets.sendBet(parseFloat(params.id), selectedTeam, eth)    
+    const txHashRes = await Bets.sendBet(parseFloat(params.id), selectedTeam, eth)
+    if(txHashRes != undefined){
+      setTxHash(txHashRes);
+      setTxHashLink("https://sepolia-optimism.etherscan.io/tx/" + txHashRes);
+    }
   }
 
   return (
@@ -65,7 +69,7 @@ const Match = ({params}: MatchProps) => {
             className='flex  justify-center items-center gap-10 mt-10'
           >
             <div
-              className={`${selectedTeam === 1 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              className={`${selectedTeam === 1 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[25.4rem] h-[30.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
               onClick={() => setBet(1)}
             >
               <Image
@@ -76,15 +80,13 @@ const Match = ({params}: MatchProps) => {
                 className={'drop-shadow-xl'}
               />
             </div>
-            <div className='w-[18.2rem] h-[13.5rem] bg-lightOrange text-white text-5xl flex justify-center items-center rounded-xl'>
+            <div className='w-[15.2rem] h-[10.5rem] bg-lightOrange text-white text-5xl flex justify-center items-center rounded-xl'>
               <p>
-                {
-                  winner === '' ? 'VS' : winner
-                }
+                VS
               </p>
             </div>
             <div
-              className={`${selectedTeam === 2 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              className={`${selectedTeam === 2 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[25.4rem] h-[30.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
               onClick={() => setBet(2)}
             >
               <Image
@@ -109,6 +111,15 @@ const Match = ({params}: MatchProps) => {
               Bet
             </button>
           </div>
+
+          {txHashLink != '' && (
+            <div
+              className='flex flex-col justify-center items-center gap-4 mt-10 bg-buttonOrange p-3 rounded-xl'
+            >
+              <h1 className='text-3xl text-white'>Your bet has been placed, take a look at the transaction here:</h1>
+              <a className='text-xl text-white underline' href={txHashLink}>{txHash}</a>
+            </div>
+          )}
         </div>
       </div>
     </div >
