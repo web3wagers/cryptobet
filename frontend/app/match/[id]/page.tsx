@@ -6,6 +6,7 @@ import MatchAPI from '@/src/mock/matches.json'
 import {MatchElement} from '@/src/config/interfaces/match'
 import {setTimeout} from 'timers'
 import Bets from '@/src/contracts/BetsContract'
+import Toastify from 'toastify-js'
 
 interface MatchProps {
   params: {
@@ -15,7 +16,9 @@ interface MatchProps {
 
 const Match = ({params}: MatchProps) => {
 
-  const [selectedMatch, setSelectedMatch] = useState<any>()
+  const [ethToBet, setEthToBet] = useState()
+  
+  const [selectedMatch, setSelectedMatch] = useState<MatchElement>()
   const [selectedTeam, setSelectedTeam] = useState<string>('')
   const [winner, setwinner] = useState('')
   const {matches} = MatchAPI
@@ -38,8 +41,26 @@ const Match = ({params}: MatchProps) => {
   }
 
   const determineWinner = (team: string) => {
+    if(ethToBet === undefined || ethToBet === 0) {
+      Toastify({
+    text: "You can not bet 0 ETH",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "left", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background: "linear-gradient(to right, #d9b0b0, #cf1b1b)",
+    },
+    onClick: function(){} // Callback after click
+  }).showToast();
+      return
+    }
+    console.log(`${team} - ${selectedMatch?.strHomeTeam}`)
+    console.log(`${selectedMatch?.intHomeScore} - ${selectedMatch?.intAwayScore}`)
     setTimeout(() => {
-
+      
       if (selectedMatch?.intHomeScore && selectedMatch?.intAwayScore) {
         if (selectedMatch?.intHomeScore > selectedMatch?.intAwayScore) {
           if (selectedMatch?.strHomeTeam === team) {
@@ -59,6 +80,8 @@ const Match = ({params}: MatchProps) => {
       }
     }, 4000);
   }
+
+  
 
   return (
     <div
@@ -84,8 +107,8 @@ const Match = ({params}: MatchProps) => {
             className='flex  justify-center items-center gap-10 mt-10'
           >
             <div
-              className={`${selectedTeam === selectedMatch?.team1name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.team1name!)}
+              className={`${selectedTeam === selectedMatch?.strHomeTeam || selectedTeam === 'draw' ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.strHomeTeam!)}
             >
               <Image
                 src={selectedMatch?.team1imgurl!}
@@ -95,17 +118,27 @@ const Match = ({params}: MatchProps) => {
                 className={'drop-shadow-xl'}
               />
             </div>
-            <div className='w-[18.2rem] h-[13.5rem] bg-lightOrange text-white text-5xl flex justify-center items-center rounded-xl'>
-              <p>
+            <div className='flex flex-col items-center justify-center gap-10'>
+              <p className='w-[18.2rem] h-[13.5rem] bg-lightOrange text-white text-5xl flex justify-center items-center rounded-xl'>
                 {
                   winner === '' ? 'VS' : winner
                 }
               </p>
+              <button
+                className={'bg-buttonOrange text-white text-2xl py-4 px-10 rounded-xl  w-[18.2rem] '}
+                onClick={() => {
+                  setSelectedTeam('draw')
+                  determineWinner('draw')
+                }}
+              >
+                Draw
+              </button>
             </div>
             <div
-              className={`${selectedTeam === selectedMatch?.team2name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.team2name!)}
+              className={`${selectedTeam === selectedMatch?.strAwayTeam || selectedTeam === 'draw' ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(selectedMatch?.strAwayTeam!)}
             >
+              
               <Image
                 src={selectedMatch?.team2imgurl!}
                 alt='barca shield'
@@ -120,7 +153,14 @@ const Match = ({params}: MatchProps) => {
           <div
             className='flex flex-col justify-center items-center gap-10 mt-10'
           >
-            <input type="number" max={10} min={0} className='bg-stone-400 placeholder:text-gray-600 p-5 text-2xl w-[17rem] h-[5rem] rounded-xl' placeholder='Place your ETH bet' />
+            <input 
+              type="number" 
+              max={10} 
+              min={0} 
+              className='bg-stone-400 placeholder:text-gray-600 p-5 text-2xl w-[17rem] h-[5rem] rounded-xl' placeholder='Place your ETH bet' 
+              value={ethToBet}
+              onChange={(e) => setEthToBet(Number(e.target.value))}
+            />
             <button
               className='bg-buttonOrange text-white text-2xl py-4 px-10 rounded-xl'
             >

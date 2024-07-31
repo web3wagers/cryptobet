@@ -3,7 +3,7 @@ import {Roboto} from "next/font/google";
 import "./globals.css";
 import SideBar from "@/src/components/SideBar";
 import TopBar from "@/src/components/TopBar";
-
+import "toastify-js/src/toastify.css"
 const roboto = Roboto({weight: ["400", "500", "700"], subsets: ["latin"]});
 
 export const metadata: Metadata = {
