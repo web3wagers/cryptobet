@@ -114,13 +114,13 @@ const Match = ({ params }: MatchProps) => {
 
           {txHashLink != '' && (
             <div
-              className='flex flex-col justify-center items-center gap-4 mt-10 bg-buttonOrange p-3 rounded-xl'
+              className='flex flex-col justify-center items-center gap-4 mt-10 bg-buttonOrange p-5 rounded-xl'
             >
               <h1 className='text-3xl text-white'>Your bet has been placed, take a look at the transaction here:</h1>
               <a className='text-xl text-white underline' href={txHashLink}>{txHash}</a>
             </div>
           )}
-        </div>
+       </div>
       </div>
     </div >
   )
