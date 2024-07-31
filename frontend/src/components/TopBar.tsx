@@ -13,9 +13,9 @@ const TopBar = () => {
     }
 
     // Obtener los primeros 4 caracteres
-    const firstPart = input.substring(0, 4);
+    const firstPart = input.substring(0, 7);
     // Obtener los últimos 2 caracteres
-    const lastPart = input.substring(input.length - 2);
+    const lastPart = input.substring(input.length - 6);
 
     // Unir las partes con "..."
     return `${firstPart}...${lastPart}`;
