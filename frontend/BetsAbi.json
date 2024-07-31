@@ -213,7 +213,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "getAllEvents",
+		"name": "getActiveEvents",
 		"outputs": [
 			{
 				"components": [

@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const contractName = "Bets";
-const fileName = `/backend/contracts/${contractName}.sol`;
+const fileName = `../backend/contracts/${contractName}.sol`;
 
 // Read the Solidity source code from the file system
 const contractPath = path.join(__dirname, fileName);
