@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
+import UserController from "@/src/controllers/UserController";
 
 const TopBar = () => {
   const [accountAddress, setAccountAddress] = useState<any>();
   const [walletConnected, setWalletConnected] = useState<any>(false);
-
+  
   function shortenString(input: string) {
     // Asegurarse de que la longitud de la cadena es suficiente
     if (input.length <= 6) {
@@ -32,7 +33,9 @@ const TopBar = () => {
           method: "eth_requestAccounts",
         });
         var formatAddress = shortenString(accounts[0]);
+        UserController.setUserAddress(accounts[0]);
         setAccountAddress(formatAddress);
+        console.log(UserController.getUserAddress());
         setWalletConnected(true);
       } catch (err) {
         console.error(err);

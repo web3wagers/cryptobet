@@ -3,8 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, {useEffect, useState} from 'react'
 import MatchAPI from '@/src/mock/matches.json'
-import {MatchElement} from '@/src/config/interfaces/match'
-import {setTimeout} from 'timers'
 import Bets from '@/src/contracts/BetsContract'
 
 interface MatchProps {
@@ -14,50 +12,33 @@ interface MatchProps {
 }
 
 const Match = ({params}: MatchProps) => {
-
-  const [selectedMatch, setSelectedMatch] = useState<any>()
-  const [selectedTeam, setSelectedTeam] = useState<string>('')
+  const [selectedMatch, setSelectedMatch] = useState<any>();
+  const [selectedTeam, setSelectedTeam] = useState<number>(0);
+  const [eth, setEth] = useState<number>(0);
   const [winner, setwinner] = useState('')
   const {matches} = MatchAPI
   useEffect(() => {
     const filterMatches = async () => {
       const filteredMatch = await Bets.getEventById(parseInt(params.id))
-      console.log(filteredMatch);
       setSelectedMatch(filteredMatch)
     }
 
     filterMatches()
-  }, [])
+  }, [params.id])
 
   useEffect(() => {
   }, [selectedTeam])
 
-  const setBet = (team: string) => {
-    setSelectedTeam(prev => prev = team)
-    determineWinner(team)
+  const setBet = (team: number) => {
+    setSelectedTeam(team)
   }
 
-  const determineWinner = (team: string) => {
-    setTimeout(() => {
+  const setEthAmount = (event: any) => {
+    setEth(event.target.value);
+  };
 
-      if (selectedMatch?.intHomeScore && selectedMatch?.intAwayScore) {
-        if (selectedMatch?.intHomeScore > selectedMatch?.intAwayScore) {
-          if (selectedMatch?.strHomeTeam === team) {
-            setwinner('Bettor Wins')
-          } else {
-            setwinner('House Wins')
-          }
-        } else if (selectedMatch?.intHomeScore < selectedMatch?.intAwayScore) {
-          if (selectedMatch?.strAwayTeam === team) {
-            setwinner('Bettor Wins')
-          } else {
-            setwinner('House Wins')
-          }
-        } else {
-          setwinner('Draw')
-        }
-      }
-    }, 4000);
+  async function sendBet() {
+    await Bets.sendBet(parseFloat(params.id), selectedTeam, eth)    
   }
 
   return (
@@ -84,8 +65,8 @@ const Match = ({params}: MatchProps) => {
             className='flex  justify-center items-center gap-10 mt-10'
           >
             <div
-              className={`${selectedTeam === selectedMatch?.team1name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.team1name!)}
+              className={`${selectedTeam === 1 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(1)}
             >
               <Image
                 src={selectedMatch?.team1imgurl!}
@@ -103,8 +84,8 @@ const Match = ({params}: MatchProps) => {
               </p>
             </div>
             <div
-              className={`${selectedTeam === selectedMatch?.team2name ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
-              onClick={() => setBet(selectedMatch?.team2name!)}
+              className={`${selectedTeam === 2 ? 'bg-buttonOrange' : 'bg-lightOrange'} cursor-pointer w-[35.4rem] h-[40.9rem]  rounded-xl p-10 flex flex-col justify-center items-center`}
+              onClick={() => setBet(2)}
             >
               <Image
                 src={selectedMatch?.team2imgurl!}
@@ -120,8 +101,9 @@ const Match = ({params}: MatchProps) => {
           <div
             className='flex flex-col justify-center items-center gap-10 mt-10'
           >
-            <input type="number" max={10} min={0} className='bg-stone-400 placeholder:text-gray-600 p-5 text-2xl w-[17rem] h-[5rem] rounded-xl' placeholder='Place your ETH bet' />
+            <input onChange={setEthAmount} type="number" max={10} min={0} className='bg-stone-400 placeholder:text-gray-600 p-5 text-2xl w-[17rem] h-[5rem] rounded-xl' placeholder='Place your ETH bet' />
             <button
+              onClick={sendBet}
               className='bg-buttonOrange text-white text-2xl py-4 px-10 rounded-xl'
             >
               Bet
