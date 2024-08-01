@@ -36,7 +36,12 @@ contract Bets {
     mapping(uint => Event) public events;
     mapping(uint => Bet[]) public eventBets;
 
-    event BetPlaced(uint indexed eventId, address indexed better, uint amount, uint8 predictedResult);
+    event BetPlaced(
+        uint indexed eventId,
+        address indexed better,
+        uint amount,
+        uint8 predictedResult
+    );
     event BetPaid(uint indexed eventId, address indexed better, uint amount);
 
     constructor() {
@@ -48,33 +53,55 @@ contract Bets {
         require(msg.sender == owner, "Only owner can call this function");
         _;
     }
-    
-    function createEvent(uint eventType, string memory name, string memory team1name, 
-                         string memory team2name, string memory team1imgurl, string memory team2imgurl, 
-                         string memory time) public onlyOwner {
+
+    function createEvent(
+        uint eventType,
+        string memory name,
+        string memory team1name,
+        string memory team2name,
+        string memory team1imgurl,
+        string memory team2imgurl,
+        string memory time
+    ) public onlyOwner {
         // method for event creation
         // params: name: name of the event, team1: team1 name, team2: team2 name
         // returns: none
-        events[nextEventId] = Event(nextEventId, eventType, name, team1name, team2name, team1imgurl, team2imgurl, time, 0, true);
+        events[nextEventId] = Event(
+            nextEventId,
+            eventType,
+            name,
+            team1name,
+            team2name,
+            team1imgurl,
+            team2imgurl,
+            time,
+            0,
+            true
+        );
         nextEventId++;
     }
 
     function placeBet(uint eventId, uint8 predictedResult) public payable {
         // method for user to bet
-        // params: eventId: id of the event where the bet is placed, predictedResult: value between 1 and 3 
+        // params: eventId: id of the event where the bet is placed, predictedResult: value between 1 and 3
         // returns: none
         require(events[eventId].isActive, "Event is not active");
         require(msg.value > 0, "Bet amount must be greater than zero");
-        require(predictedResult >= 1 && predictedResult <= 3, "Invalid predicted result");
+        require(
+            predictedResult >= 1 && predictedResult <= 3,
+            "Invalid predicted result"
+        );
 
-        eventBets[eventId].push(Bet(eventId, payable(msg.sender), predictedResult, msg.value, false));
+        eventBets[eventId].push(
+            Bet(eventId, payable(msg.sender), predictedResult, msg.value, false)
+        );
 
         emit BetPlaced(eventId, msg.sender, msg.value, predictedResult);
     }
 
     function setEventResult(uint eventId, uint8 result) public onlyOwner {
         // method for admin to set event result (1, 2, 3)
-        // params: eventId: id of the event where the bet is placed, result: value between 1 and 3 
+        // params: eventId: id of the event where the bet is placed, result: value between 1 and 3
         // returns: none
         require(events[eventId].isActive, "Event is not active");
         require(result >= 1 && result <= 3, "Invalid result");
@@ -105,7 +132,7 @@ contract Bets {
             Bet storage bet = eventBets[eventId][i];
             if (bet.predictedResult == events[eventId].result && !bet.paid) {
                 uint payout = (bet.amount * totalPool) / winnerPool;
-                
+
                 // payable(bet.better).transfer(payout);
                 (bool sent, ) = bet.better.call{value: payout}("");
                 require(sent, "Failed to send Ether");
@@ -119,7 +146,7 @@ contract Bets {
     function getActiveEvents() public view returns (Event[] memory) {
         Event[] memory allEvents = new Event[](nextEventId);
         for (uint i = 0; i < nextEventId; i++) {
-            if(events[i].isActive) {
+            if (events[i].isActive) {
                 allEvents[i] = events[i];
             }
         }
@@ -129,5 +156,31 @@ contract Bets {
     function getEventById(uint _id) public view returns (Event memory) {
         Event memory retEvent = events[_id];
         return retEvent;
+    }
+
+    function getUserBets(address user) public view returns (Bet[] memory) {
+        uint totalBets = 0;
+
+        for (uint i = 0; i < nextEventId; i++) {
+            for (uint j = 0; j < eventBets[i].length; j++) {
+                if (eventBets[i][j].better == user) {
+                    totalBets++;
+                }
+            }
+        }
+
+        Bet[] memory userBets = new Bet[](totalBets);
+        uint index = 0;
+
+        for (uint i = 0; i < nextEventId; i++) {
+            for (uint j = 0; j < eventBets[i].length; j++) {
+                if (eventBets[i][j].better == user) {
+                    userBets[index] = eventBets[i][j];
+                    index++;
+                }
+            }
+        }
+
+        return userBets;
     }
 }
