@@ -4,24 +4,10 @@ const { Web3 } = require('web3');
 var web3 = new Web3("https://sepolia.optimism.io");
 
 // TODO: add this as an env var
-const deployedAddress = '0x850e6741DAd561B26B4b3AD3f177Ff368857e93f';
+const deployedAddress = '0x359Cf6c8d26bD1cFB647aB567e821339FD16a712';
 const abi = require("../../BetsAbi.json");
 const BetsContract = new web3.eth.Contract(abi, deployedAddress);
 BetsContract.handleRevert = true;
-
-function floatToUint8(floatValue: number): number {
-  // Escalar el valor float al rango de 0 a 255
-  const scaledValue = floatValue * 255;
-
-  // Redondear el valor
-  const roundedValue = Math.round(scaledValue);
-
-  // Asegurarse de que el valor esté dentro del rango de uint8
-  if (roundedValue < 0) return 0;
-  if (roundedValue > 255) return 255;
-
-  return roundedValue;
-}
 
 async function requestAccount() {
   try {

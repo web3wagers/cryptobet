@@ -144,7 +144,15 @@ contract Bets {
     }
 
     function getActiveEvents() public view returns (Event[] memory) {
-        Event[] memory allEvents = new Event[](nextEventId);
+        uint totalEvents = 0;
+
+        for (uint i = 0; i < nextEventId; i++) {
+            if (events[i].isActive) {
+                totalEvents++;
+            }
+        }
+
+        Event[] memory allEvents = new Event[](totalEvents);
         for (uint i = 0; i < nextEventId; i++) {
             if (events[i].isActive) {
                 allEvents[i] = events[i];
